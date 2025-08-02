@@ -1,173 +1,376 @@
-﻿#include <iostream>
+#include <iostream>
 #include <string>
 #include <iomanip>
 #include <vector>
 #include <Windows.h>
+#include <limits>
+#include <iomanip>
 using namespace std;
 
+int input; //Define input as a global variable to be used in the main function
+
+// Function prototypes. Defined here to let code know these functions exist, and will be programmed later in the file and used later.
+void mainMenu();
+void displayMenu();
+void getRice();
+void getNoodles();
+void getDessert();
+void getDrink();
+void payment();
+
+//Define menu items and prices
+//Rice category items defined globally as an array of objects for vector usage
+vector<int> riceItemNumbers = {1, 2, 3, 4, 5};
+vector<string> riceItemNames = {"Egg Fried Rice", "Chicken Rice", "Seafood Rice", "Nasi Lemak", "Nasi Kukus"};
+vector<double> riceItemPrices = {7.00, 8.00, 11.00, 4.50, 8.00};
+
+//Noodles category items defined globally as an array of objects for vector usage
+vector<int> noodlesItemNumbers = {1, 2, 3, 4, 5};
+vector<string> noodlesItemNames = {"Pan Mee", "Szechuan Noodles", "Wan Tan Mee", "Tonkotsu Ramen", "Noodles 5"};
+vector<double> noodlesItemPrices = {6.00, 7.00, 8.00, 9.00, 10.00};
+
+// Dessert category items defined globally as an array of objects for vector usage
+vector<int> dessertItemNumbers = {1, 2, 3, 4, 5};
+vector<string> dessertItemNames = {"Chocolate Brownie", "Cheesecake", "Neapolitan Ice Cream", "Macarons", "Fruit Pudding"};
+vector<double> dessertItemPrices = {5.00, 6.00, 4.50, 3.00, 5.00};
+
+// Drink category items defined globally as an array of objects for vector usage
+vector<int> drinkItemNumbers = {1, 2, 3, 4, 5};
+vector<string> drinkItemNames = {"Coke", "Sprite", "Fanta", "Water", "Tea"};
+vector<double> drinkItemPrices = {3.00, 3.00, 3.00, 1.00, 2.00};
+
+//Fetch order details as a global function
+vector<int> orderItemNumbers;
+vector<string> orderItemNames;
+vector<int> orderQuantities;
+vector<double> orderUnitPrices;
+vector<double> orderTotalPrices;
+
+void mainMenu() {
+     //Main Menu
+    cout << "                                                                      {~.~}" << "\n";
+	cout << "                                                                     <(___)>" << "\n";
+    cout << " *******   ****     ****  ****        *******   ********  ******** **********     **     **     ** *******       **     ****     ** **********" << "\n";
+    cout << "/**////** /**/**   **/** */// *      /**////** /**/////  **////// /////**///     ****   /**    /**/**////**     ****   /**/**   /**/////**/// " << "\n";
+    cout << "/**   /** /**//** ** /**/*   /*      /**   /** /**      /**           /**       **//**  /**    /**/**   /**    **//**  /**//**  /**    /**    " << "\n";
+    cout << "/*******  /** //***  /**/ ****       /*******  /******* /*********    /**      **  //** /**    /**/*******    **  //** /** //** /**    /**    " << "\n";
+    cout << "/**///**  /**  //*   /** */// *      /**///**  /**////  ////////**    /**     **********/**    /**/**///**   **********/**  //**/**    /**    " << "\n";
+    cout << "/**  //** /**   /    /**/*   /*      /**  //** /**             /**    /**    /**//////**/**    /**/**  //** /**//////**/**   //****    /**    " << "\n";
+    cout << "/**   //**/**        /**/ ****       /**   //**/******** ********     /**    /**     /**//******* /**   //**/**     /**/**    //***    /**    " << "\n";
+    cout << "//     // //         //  ////        //     // //////// ////////      //     //      //  ///////  //     // //      // //      ///     //     " << "\n";
+	cout << "Welcome to RM8 restaurant" << "\n";
+	cout << "Choose the option you want" << "\n";
+	cout << "1. Menu" << "\n";
+	cout << "2. Background of this restaurant" << "\n";
+	cout << "Please insert by number thank you" << "\n";
+    cin >> input;
+
+    if(input == 1) {
+        cin.clear(); // Clear the input buffer
+        cin.ignore(); // Clear the input buffer
+        displayMenu(); // Show menu
+    }
+
+    if (cin.fail()) {
+        cout << "Invalid input. Please enter a number." << "\n";
+        cin.clear(); // Clear the error flag
+        cin.ignore(); // Clear the input buffer
+        mainMenu(); // Show the menu again
+    }
+}
+
+void displayMenu() {
+    while (true) {
+        cout << " MENU " << "\n";
+        cout << "*********************************************************************************" << "\n";
+        cout << "1. Rice" << "\n";
+        cout << "2. Noodles" << "\n";
+        cout << "3. Dessert" << "\n";
+        cout << "4. Drink" << "\n";
+        cout << "0. Proceed to payment." << "\n";
+        cout << "Insert the number you want to proceed to details menu." << "\n";
+        cin >> input;
+
+        if (input == 1) {
+            getRice();
+            break;
+        } else if (input == 2) {
+            getNoodles();
+            break;
+        } else if (input == 3) {
+            getDessert();
+            break;
+        } else if (input == 4) {
+            getDrink();
+            break;
+        } else if (cin.fail()) {
+            cout << "Invalid input. Please enter a number." << "\n";
+            cin.clear();
+            cin.ignore( );
+            displayMenu(); // Prompt again
+            break; // Exit the loop to avoid infinite prompting
+        } else if (input == 0) {
+            payment();
+            break; // Exit the loop to proceed to payment
+        } else {
+            cout << "Invalid input. Please try again." << "\n";
+        }
+    }
+}
+
+void getRice() {
+    do {
+        // Show menu
+        cout << "\n=== MENU ===\n";
+        cout << "Item No\tName\t\tPrice (RM)\n";
+
+        for (size_t i = 0; i < riceItemNumbers.size(); ++i) {
+            cout << riceItemNumbers[i] << "\t" << left << setw(12) << riceItemNames[i] << "RM " << fixed << setprecision(2) << riceItemPrices[i] << "\n";
+        }
+
+        cout << "0. Choose from other categories." << "\n";
+
+        // Get input
+        int itemNum;
+        cout << "\nEnter item number: ";
+        cin >> itemNum;
+
+        // Search for item in menu
+        int index = -1;
+        for (size_t i = 0; i < riceItemNumbers.size(); ++i) {
+            if (riceItemNumbers[i] == itemNum) {
+                index = i;
+                break;
+            }
+        }
+
+        if (cin.fail()) {
+            cout << "Invalid item number.\n";
+            cin.clear(); // Clear the error flag
+            cin.ignore(); // Clear the input buffer
+            continue; // Continue to prompt for item number
+        }
+
+        if (itemNum == 0) {
+            displayMenu();
+            return; // Exit the function to avoid further processing
+        } else if (index == -1) {
+            cout << "Invalid item number. Please try again." << "\n";
+            cin.clear(); // Clear the error flag
+            cin.ignore(); // Clear the input buffer
+            continue; // Prompt again
+        }
+
+        // Get quantity
+        int qty;
+        cout << "Enter quantity: ";
+        cin >> qty;
+        
+        // Store in order vectors
+        orderItemNumbers.push_back(riceItemNumbers[index]);
+        orderItemNames.push_back(riceItemNames[index]);
+        orderQuantities.push_back(qty);
+        orderUnitPrices.push_back(riceItemPrices[index]);
+        orderTotalPrices.push_back(qty * riceItemPrices[index]);
+
+    } while (true);
+}
+
+void getNoodles() {
+    do {
+        // Show menu
+        cout << "\n=== MENU ===\n";
+        cout << "Item No\tName\t\tPrice (RM)\n";
+        for (size_t i = 0; i < noodlesItemNumbers.size(); ++i) {
+            cout << noodlesItemNumbers[i] << "\t" << left << setw(12) << noodlesItemNames[i]
+                 << "RM " << fixed << setprecision(2) << noodlesItemPrices[i] << "\n";
+        }
+        cout << "0. Choose from other categories." << "\n";
+
+         // Get input
+        int itemNum;
+        cout << "\nEnter item number: ";
+        cin >> itemNum;
+
+        // Search for item in menu
+        int index = -1;
+        for (size_t i = 0; i < noodlesItemNumbers.size(); ++i) {
+            if (noodlesItemNumbers[i] == itemNum) {
+                index = i;
+                break;
+            }
+        }
+
+        if (cin.fail()) {
+            cout << "Invalid item number.\n";
+            cin.clear(); // Clear the error flag
+            cin.ignore( ); // Clear the input buffer
+            continue; // Continue to prompt for item number
+        }
+
+        if (itemNum == 0) {
+            displayMenu();
+            return; // Exit the function to avoid further processing
+        } else if (index == -1) {
+            cout << "Invalid item number. Please try again." << "\n";
+            cin.clear(); // Clear the error flag
+            cin.ignore( ); // Clear the input buffer and allow the first digit to be read
+            continue; // Prompt again
+        }
+
+        // Get quantity
+        int qty;
+        cout << "Enter quantity: ";
+        cin >> qty;
+        
+        // Store in order vectors
+        orderItemNumbers.push_back(noodlesItemNumbers[index]);
+        orderItemNames.push_back(noodlesItemNames[index]);
+        orderQuantities.push_back(qty);
+        orderUnitPrices.push_back(noodlesItemPrices[index]);
+        orderTotalPrices.push_back(qty * noodlesItemPrices[index]);
+
+    } while (true);
+}
+
+void getDessert() {
+    do {
+        // Show menu
+        cout << "\n=== MENU ===\n";
+        cout << "Item No\tName\t\tPrice (RM)\n";
+        for (size_t i = 0; i < dessertItemNumbers.size(); ++i) {
+            cout << dessertItemNumbers[i] << "\t" << left << setw(12) << dessertItemNames[i]
+                 << "RM " << fixed << setprecision(2) << dessertItemPrices[i] << "\n";
+        }
+        cout << "0. Choose from other categories." << "\n";
+
+         // Get input
+        int itemNum;
+        cout << "\nEnter item number: ";
+        cin >> itemNum;
+
+        // Search for item in menu
+        int index = -1;
+        for (size_t i = 0; i < dessertItemNumbers.size(); ++i) {
+            if (dessertItemNumbers[i] == itemNum) {
+                index = i;
+                break;
+            }
+        }
+
+        if (cin.fail()) {
+            cout << "Invalid item number.\n";
+            cin.clear(); // Clear the error flag
+            cin.ignore( ); // Clear the input buffer
+            continue; // Continue to prompt for item number
+        }
+
+        if (itemNum == 0) {
+            displayMenu();
+            return; // Exit the function to avoid further processing
+        } else if (index == -1) {
+            cout << "Invalid item number. Please try again." << "\n";
+            cin.clear(); // Clear the error flag
+            cin.ignore( ); // Clear the input buffer and allow the first digit to be read
+            continue; // Prompt again
+        }
+
+        // Get quantity
+        int qty;
+        cout << "Enter quantity: ";
+        cin >> qty;
+        
+        // Store in order vectors
+        orderItemNumbers.push_back(dessertItemNumbers[index]);
+        orderItemNames.push_back(dessertItemNames[index]);
+        orderQuantities.push_back(qty);
+        orderUnitPrices.push_back(dessertItemPrices[index]);
+        orderTotalPrices.push_back(qty * dessertItemPrices[index]);
+
+    } while (true);
+}
+
+void getDrink() {
+    do {
+        // Show menu
+        cout << "\n=== MENU ===\n";
+        cout << "Item No\tName\t\tPrice (RM)\n";
+        for (size_t i = 0; i < drinkItemNumbers.size(); ++i) {
+            cout << drinkItemNumbers[i] << "\t" << left << setw(12) << drinkItemNames[i]
+                 << "RM " << fixed << setprecision(2) << drinkItemPrices[i] << "\n";
+        }
+        cout << "0. Choose from other categories." << "\n";
+
+         // Get input
+        int itemNum;
+        cout << "\nEnter item number: ";
+        cin >> itemNum;
+
+        // Search for item in menu
+        int index = -1;
+        for (size_t i = 0; i < drinkItemNumbers.size(); ++i) {
+            if (drinkItemNumbers[i] == itemNum) {
+                index = i;
+                break;
+            }
+        }
+
+        if (cin.fail()) {
+            cout << "Invalid item number.\n";
+            cin.clear(); // Clear the error flag
+            cin.ignore( ); // Clear the input buffer
+            continue; // Continue to prompt for item number
+        }
+
+        if (itemNum == 0) {
+            displayMenu();
+            return; // Exit the function to avoid further processing
+        } else if (index == -1) {
+            cout << "Invalid item number. Please try again." << "\n";
+            cin.clear(); // Clear the error flag
+            cin.ignore( ); // Clear the input buffer and allow the first digit to be read
+            continue; // Prompt again
+        }
+
+        // Get quantity
+        int qty;
+        cout << "Enter quantity: ";
+        cin >> qty;
+        
+        // Store in order vectors
+        orderItemNumbers.push_back(drinkItemNumbers[index]);
+        orderItemNames.push_back(drinkItemNames[index]);
+        orderQuantities.push_back(qty);
+        orderUnitPrices.push_back(drinkItemPrices[index]);
+        orderTotalPrices.push_back(qty * drinkItemPrices[index]);
+
+    } while (true);
+}
+
+void payment() {
+    // Print receipt
+    double grandTotal = 0.0;
+    cout << "\n=== RECEIPT ===\n";
+    cout << "Item\t\tQty\tUnit Price\tTotal\n";
+    for (size_t i = 0; i < orderItemNumbers.size(); ++i) {
+        cout << left << setw(12) << orderItemNames[i]
+             << "\t" << orderQuantities[i]
+             << "\tRM " << fixed << setprecision(2) << orderUnitPrices[i]
+             << "\tRM " << orderTotalPrices[i] << "\n";
+        grandTotal += orderTotalPrices[i];
+    }
+
+    cout << "-------------------------------\n";
+    cout << "Total: RM " << fixed << setprecision(2) << grandTotal << "\n";
+    return;
+}
+
 int main() {
-	int num1, menu1, quant_rice, quant_nood, quant_dess, quant_drink, price, pay_meth;
-	char choice1;
-	string rice, noodles, dessert, drink;
-	vector<string> orders;
-	step0:
-	cout << " {~.~}" << endl;
-	cout << "<(___)>" << endl;
-	cout << "Welcome to 8 ringgits restaurant" << endl;
-	cout << "Choose the option you want" << endl;
-	cout << "1. Menu" << endl;
-	cout << "2. Background of this restaurant" << endl;
-	cout << "Please insert by number thank you" << endl;
-step1:	
-	cin >> num1;
-	step2:
-	if (num1 == 1) {
-		cout << " MENU " << endl;
-		cout << "*********************************************************************************" << endl;
-		cout << "1. Rice" << endl;
-		cout << "2. Noodles" << endl;
-		cout << "3. dessert" << endl;
-		cout << "4. drink" << endl;
-		cout << "Insert the number you want to proceed to details menu." << endl;
-		cin >> menu1;
-		if (menu1 == 1) {
-			cout << "1. fried rice" << endl;
-			cout << "2. rice 2" << endl;
-			cout << "3. rice 3" << endl;
-			cout << "4. rice 4" << endl;
-			cout << "5. rice 5" << endl;
-			cout << "6. rice 6" << endl;
-			cout << "7. rice 7" << endl;
-			cout << "8. rice 8" << endl;
-			cout << "Insert the name of the rice you want." << endl;
-			cout << "Insert (done) to end placing order in rice" << endl;
-			while (true) {
-				getline(cin, rice);
-				if (rice == "done") {
-					break;
-				}
-				if (!rice.empty()) {
-					orders.push_back(rice);
-				}
-			}
-		}
-		else if (menu1 == 2) {
-			cout << "1. noodles 1" << endl;
-			cout << "2. noodles 2" << endl;
-			cout << "3. noodles 3" << endl;
-			cout << "4. noodles 4" << endl;
-			cout << "5. noodles 5" << endl;
-			cout << "6. noodles 6" << endl;
-			cout << "7. noodles 7" << endl;
-			cout << "8. noodles 8" << endl;
-			cout << "Insert the name of the noodles you want." << endl;
-			cout << "Insert (done) to end placing order in noodles" << endl;
-			while (true) {
-				getline(cin, noodles);
-				if (noodles == "done") {
-					break;
-				}
-				if (!noodles.empty()) {
-					orders.push_back(noodles);
-				}
-			}
-		}
-		else if (menu1 == 3) {
-			cout << "1. dessert 1" << endl;
-			cout << "2. dessert 2" << endl;
-			cout << "3. dessert 3" << endl;
-			cout << "4. dessert 4" << endl;
-			cout << "5. dessert 5" << endl;
-			cout << "6. dessert 6" << endl;
-			cout << "7. dessert 7" << endl;
-			cout << "8. dessert 8" << endl;
-			cout << "Insert the name of the dessert you want." << endl;
-			cout << "Insert (done) to end placing order in dessert" << endl;
-			while (true) {
-				getline(cin, dessert);
-				if (dessert == "done") {
-					break;
-				}	
-				if (!dessert.empty()) {
-					orders.push_back(dessert);
-				}
-			}
-		}
-		else if (menu1 == 4) {
-			cout << "1. drink 1" << endl;
-			cout << "2. drink 2" << endl;
-			cout << "3. drink 3" << endl;
-			cout << "4. drink 4" << endl;
-			cout << "5. drink 5" << endl;
-			cout << "6. drink 6" << endl;
-			cout << "7. drink 7" << endl;
-			cout << "8. drink 8" << endl;
-			cout << "Insert the name of the drink you want." << endl;
-			cout << "Insert (done) to end placing order in drink" << endl;
-			while (true) {
-				getline(cin, drink);
-				if (drink == "done") {
-					break;
-				}
-				if (!drink.empty()) {
-					orders.push_back(drink);
-				}
-			}
-		}
-		else {
-			cout << "Please insert 1, 2, 3 or 4 to the blank space. Thank you" << endl;
-			system("pause");
-			goto step2;
-		}
-		step4:
-			cout << "Do you wish to continue placing order? ";
-			cin >> choice1;
-			if (choice1 == 'y' || choice1 == 'Y') {
-				goto step2;
-			}
-			else if (choice1 == 'n' || choice1 == 'N') {
-				goto step3;
-			}
-			else {
-				cout << "PLEASE INSERT Y OR N TO PROCEED!!!!!!!" << endl;
-				goto step4;
-			}
-	}
-	else if (num1 == 2) {
-		cout << "write something" << endl;
-		system("pause");
-		goto step0;
-	}
-	else {
-		cout << "Please insert 1 or 2 to the blank space. Thank you" << endl;
-		system("pause");
-		goto step0;
-	}
-step3:
-	cout << "\nYou've ordered " << orders.size() << " item(s):\n" << endl;
-	for (string item : orders) {
-		cout << "- " << item << endl;
-	}
-	price = orders.size() * 8;
-	cout << "Total price: RM" << price << endl;
-	cout << "Choose your payment method:" << endl;
-	cout << "1. eWallet" << endl;
-	cout << "2. Credit Card" << endl;
-	cin >> pay_meth;
-	if (pay_meth == 1) {
-		cout << "You have chosen eWallet." << endl;
-	}
-	else if (pay_meth == 2) {
-		cout << "You have chosen Credit Card." << endl;
-	}
-	else {
-		cout << "Invalid payment method selected." << endl;
-		return 1;
-	}
-	for (int i = 3; i > 0; i--) {
-		cout << i << endl;
-		Sleep(1000);
-	}
-	cout << "Thank you for your order!" << endl;
-	return 0;
+    void displayMenu(); // Function prototype for displaying the menu
+    void getRice(); // Function prototype for getting rice orders   
+    void getNoodles(); // Function prototype for getting noodles orders
+
+    mainMenu(); // Call the main menu function, and the start of the program
+
+    return 0;
 }
